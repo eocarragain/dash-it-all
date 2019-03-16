@@ -10,6 +10,7 @@ import plotly.graph_objs as go
 import plotly.figure_factory as ff
 import re
 import copy
+import os
 
 def col_name(short):
     lookup = {
@@ -32,7 +33,13 @@ def col_name(short):
     else:
         return short
 
-df = pd.read_csv('lmt_projects.csv')
+if 'dash-it-all-url' in os.environ:
+    url = os.environ['dash-it-all-url']
+    df = pd.read_excel(url, 'Projects')
+else:
+    url = 'lmt_projects.csv'
+    df = pd.read_csv(url)
+
 df[col_name('s_themes')] = df[col_name('s_themes')].fillna('')
 df["all_themes"] = df[col_name('p_theme')].map(str) + ', ' + df[col_name('s_themes')]
 df[col_name('scale')] = df[col_name('scale')].str.strip()
