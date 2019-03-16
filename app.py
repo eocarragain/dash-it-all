@@ -2,6 +2,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
+import dash_auth
 import dash_cytoscape as cyto
 from dash.dependencies import Input, Output, State
 import pandas as pd
@@ -11,6 +12,7 @@ import plotly.figure_factory as ff
 import re
 import copy
 import os
+import ast
 
 def col_name(short):
     lookup = {
@@ -369,8 +371,16 @@ teams_dropdown_args = {
 # App setup and layout
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
+
+if 'dash-it-all-pass' in os.environ:
+    pass_pairs = ast.literal_eval(os.environ['dash-it-all-pass'])
+    auth = dash_auth.BasicAuth(
+        app,
+        pass_pairs
+    )
 
 app.layout =html.Div(children=[
     html.H1(children='UCC Library Strategy - Planning Dashboard'),
