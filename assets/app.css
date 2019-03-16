@@ -1,0 +1,14 @@
+div.graph-box{
+    padding: 5px 5px 5px 5px;
+    border: 2px solid black;
+    margin-bottom: 35px;
+    width: 100%;
+}
+
+div.graph-title h3{
+    text-align: center;
+}
+
+._dash-undo-redo {
+    display: none;
+}
