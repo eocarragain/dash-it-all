@@ -527,7 +527,7 @@ def update_grp_bar(scale, mode, teams, ptheme):
 def update_pthemes_bar(scale, status, mode, teams, themes):
     if themes == 'p_theme':
         return bar_return_dict(scale, status, mode, col_name(themes), 'Projects by Primary Themes', teams)
-    elif themes == 's_theme':
+    elif themes == 's_themes':
         return bar_return_dict(scale, status, mode, col_name(themes), 'Projects by Secondary Themes', teams, '', True, {'b':25})
     else: 
         return bar_return_dict(scale, status, mode, col_name(themes), 'Projects by Primary and Secondary Themes', teams, '', True, {'b':25})
