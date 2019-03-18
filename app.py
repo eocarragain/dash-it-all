@@ -284,6 +284,7 @@ scale_dropdown_args = {
     'options':options_list(valid_scales), 
     'value':valid_scales,
     'multi': True,
+    'searchable':False,
     'placeholder':"Showing all resource requirement levels, click to filter by one or more ...",
 }
 
@@ -291,6 +292,7 @@ status_dropdown_args = {
     'options':options_list(valid_status), 
     'value':['Committed', 'In progress'],
     'multi': True,
+    'searchable':False,
     'placeholder':"Showing all project statuses, click to filter by one or more ...",
 }
             
@@ -302,6 +304,7 @@ barmode_dropdown_args={
     'value':'stack',
     'className':'radio-div',
     'multi': False,
+    'searchable':False,
     'clearable': False
 }
 
@@ -313,6 +316,7 @@ themes_dropdown_args={
     ],
     'value':'p_theme',
     'multi': False,
+    'searchable':False,
     'clearable': False
 }
 
@@ -323,6 +327,7 @@ for ptheme in valid_pthemes:
 ptheme_dropdown_args={
     'options': ptheme_options,
     'multi': False,
+    'searchable':False,
     'placeholder':"Filter by a specific Primary Theme ...",
 }
 
@@ -330,6 +335,7 @@ graph_layout_dropdown_args = {
     'options': options_list(['random', 'grid', 'circle', 'concentric', 'breadthfirst', 'cose']),
     'value':'circle',
     'multi':False,
+    'searchable':False,
     'clearable':False
 }
 
@@ -365,6 +371,7 @@ teams_dropdown_args = {
     'options': options_list(all_teams, True), 
     'value': [],
     'multi':True,
+    'searchable':False,
     'placeholder':"Filter projects by one or more teams...",
 }
 
