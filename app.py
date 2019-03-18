@@ -20,7 +20,7 @@ def col_name(short):
         'project': 'Project',
         'desc': 'Description',
         'grouping': 'Grouping',
-        'scale': 'Scale (Small/Medium/Large)',
+        'scale': 'Resource Requirement (Low/Medium/High)',
         'status': 'Status (Potential/Committed/In progress/Completed/Rejected/Duplicate)',
         'p_theme': 'Primary Library Strategy Theme',
         's_themes': 'Secondary Strategy Theme(s)',
@@ -54,9 +54,9 @@ df[col_name('end')] = df[col_name('end')].fillna('')
 valid_status = df[col_name('status')].value_counts().axes[0].tolist()
 valid_scales = df[col_name('scale')].value_counts().axes[0].tolist()
 valid_pthemes = df[col_name('p_theme')].value_counts().axes[0].sort_values().tolist()
-scale_colors = {'Small': 'rgb(39, 119, 180)', 
+scale_colors = {'Low': 'rgb(39, 119, 180)', 
     'Medium': 'rgb(225, 127, 14)', 
-    'Large': 'rgb(44, 160, 44)' }
+    'High': 'rgb(44, 160, 44)' }
 # Methods to deal with multi-value columns
 def col_groups(col_series):
     val_list = []
@@ -262,9 +262,9 @@ def gantt_data(scale, status, title, teams=[], ptheme=''):
         except:
             print('skipping {0} - failed to load valid values'.format(task))
 
-    colors = {'Small': scale_colors['Small'],
+    colors = {'Low': scale_colors['Low'],
               'Medium': scale_colors['Medium'],
-              'Large': scale_colors['Large']}
+              'High': scale_colors['High']}
     fig = ff.create_gantt(data, colors=colors, index_col='Resource', showgrid_x=True, showgrid_y=True, show_colorbar=True)
     fig['layout'].update(autosize=True, width=1300, height=1500, title=title, xaxis=dict(automargin=True, mirror='allticks', dtick='M4'), margin=dict(b=10, l=350))
     return fig
