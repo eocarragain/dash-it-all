@@ -290,7 +290,7 @@ scale_dropdown_args = {
 
 status_dropdown_args = {
     'options':options_list(valid_status), 
-    'value':['Committed', 'In progress'],
+    'value':['Committed', 'In progress', 'Completed'],
     'multi': True,
     'searchable':False,
     'placeholder':"Showing all project statuses, click to filter by one or more ...",
