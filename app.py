@@ -13,6 +13,8 @@ import re
 import copy
 import os
 import ast
+import datetime
+from dateutil.relativedelta import *
 
 def col_name(short):
     lookup = {
@@ -229,8 +231,21 @@ def sem_to_date(sem, start_end):
             return '{0}-05-01'.format(end_year)
         else:
             return '{0}-08-31'.format(end_year)    
-    
-def gantt_data(scale, status, title, teams=[], ptheme=''):
+
+def project_progress(status, end_sem_datestr):
+    if status == 'Completed':
+        return 'Green'
+    end_date = datetime.datetime.strptime(end_sem_datestr, "%Y-%m-%d")
+    today = datetime.datetime.today()
+
+    if today > end_date:
+        return 'Red (late)'
+    elif today+relativedelta(months=+1) > end_date:
+        return 'Amber (due to finish)'
+    else:
+        return 'Green'
+
+def gantt_data(scale, status, title, teams=[], ptheme='', color_type='progress'):
     dfgantt = df
     dfgantt[col_name('teams')] = dfgantt[col_name('teams')].str.lower()
     if len(status) > 0:
@@ -258,14 +273,26 @@ def gantt_data(scale, status, title, teams=[], ptheme=''):
         try:
             start_sem = sem_to_date(row[col_name('start')], 'start')
             end_sem = sem_to_date(row[col_name('end')], 'end')
-            data.append({'Task':task, 'Start':start_sem, 'Finish':end_sem, 'Resource': row_scale})
+            project_status = row[col_name('status')]
+            progress = project_progress(project_status, end_sem)
+            data.append({'Task':task, 'Start':start_sem, 'Finish':end_sem, 'scale': row_scale, 'progress': progress})
         except:
             print('skipping {0} - failed to load valid values'.format(task))
 
-    colors = {'Low': scale_colors['Low'],
-              'Medium': scale_colors['Medium'],
-              'High': scale_colors['High']}
-    fig = ff.create_gantt(data, colors=colors, index_col='Resource', showgrid_x=True, showgrid_y=True, show_colorbar=True)
+    progress_colors = {
+        'Green': 'rgb(44, 160, 44)',
+        'Amber (due to finish)': 'rgb(225, 127, 14)',
+        'Red (late)': 'rgb(255, 0, 0)',
+    }
+
+    if color_type == 'progress':
+        index_column = 'progress'
+        color_dict = progress_colors
+    else:
+        index_column = 'scale'
+        color_dict = scale_colors
+
+    fig = ff.create_gantt(data, colors=color_dict, index_col=index_column, showgrid_x=True, showgrid_y=True, show_colorbar=True)
     fig['layout'].update(autosize=True, width=1300, height=1500, title=title, xaxis=dict(automargin=True, mirror='allticks', dtick='M4'), margin=dict(b=10, l=350))
     return fig
 
@@ -537,7 +564,7 @@ def graph_input_params_layout(base_id):
     return [Input('{0}-layout'.format(base_id), 'value')]
 
 @app.callback(Output('status-bar', 'figure'), bar_input_params('status-bar', ['scale', 'mode', 'team', 'ptheme']))
-def update_grp_bar(scale, mode, teams, ptheme):
+def update_status_bar(scale, mode, teams, ptheme):
     return bar_return_dict(scale, [], mode, col_name('status'), 'Project Statuses', teams, ptheme, False, {'b':25})
 
 @app.callback(Output('pthemes-bar', 'figure'), bar_input_params('pthemes-bar', ['scale', 'status', 'mode', 'team', 'theme_type']))
