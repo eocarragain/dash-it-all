@@ -537,7 +537,7 @@ def graph_input_params_layout(base_id):
     return [Input('{0}-layout'.format(base_id), 'value')]
 
 @app.callback(Output('status-bar', 'figure'), bar_input_params('status-bar', ['scale', 'mode', 'team', 'ptheme']))
-def update_grp_bar(scale, mode, teams, ptheme):
+def update_status_bar(scale, mode, teams, ptheme):
     return bar_return_dict(scale, [], mode, col_name('status'), 'Project Statuses', teams, ptheme, False, {'b':25})
 
 @app.callback(Output('pthemes-bar', 'figure'), bar_input_params('pthemes-bar', ['scale', 'status', 'mode', 'team', 'theme_type']))
